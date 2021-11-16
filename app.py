@@ -21,5 +21,17 @@ def add_url():
     return jsonify(key)
 
 
+@app.route('/url/get', methods=["GET"])
+def get_all_keys():
+    all_keys = redis_client.keys("*")
+    return jsonify([key.decode('utf-8') for key in all_keys])
+
+
+@app.route('/url/get/<key>', methods=['GET'])
+def get_key(key):
+    grabbed_key = redis_client.get(key)
+    return jsonify(grabbed_key.decode("utf-8"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
